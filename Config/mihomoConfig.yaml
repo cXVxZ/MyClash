@@ -10,7 +10,7 @@
 proxy_providers_common:
   &proxy_providers_common {
     type: http,
-    interval: 86400,
+    interval: 0,
     proxy: DIRECT,
     exclude-type: 'direct|reject|rematch',
     health-check: { enable: true, url: https://g.cn/generate_204, interval: 600, lazy: true },
@@ -124,8 +124,8 @@ tun:
 
 # Rule Provider 通用配置
 rule_providers_common:
-  rule_providers_domain: &rule_providers_domain { type: http, format: mrs, interval: 86400, behavior: domain }
-  rule_providers_ip: &rule_providers_ip { type: http, format: mrs, interval: 86400, behavior: ipcidr }
+  rule_providers_domain: &rule_providers_domain { type: http, format: mrs, interval: 0, behavior: domain }
+  rule_providers_ip: &rule_providers_ip { type: http, format: mrs, interval: 0, behavior: ipcidr }
 
 # 定义 Rule Providers
 rule-providers:
@@ -553,6 +553,12 @@ proxy-groups:
     proxies: ['默认代理', '直连']
     icon: 'https://fastly.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Stack.png'
 
+  #个人修改
+  - name: '🍄'
+    <<: *group_common_select
+    include-all: true
+  #个人修改
+
   - name: '直连'
     <<: *group_common_select
     proxies: ['🇨🇳 直连 | 双栈', '🇨🇳 直连 | IPv4优先', '🇨🇳 直连 | IPv6优先', '🇨🇳 直连 | 仅IPv4', '🇨🇳 直连 | 仅IPv6']
@@ -639,7 +645,11 @@ rules:
   - DOMAIN,fsend.cn,直连
   - DOMAIN,international-gfe.download.nvidia.com,直连
   - DOMAIN-SUFFIX,hdslb.com,直连
-
+  # 个人修改
+  - DOMAIN-SUFFIX,jsdelivr.net,直连
+  - DOMAIN-KEYWORD,mushroomtrack,🍄
+  - DOMAIN-SUFFIX,alonestreaming.com,🍄
+  
   # 禁用国外 QUIC 流量
   - AND,((NETWORK,UDP),(DST-PORT,443),(NOT,((OR,((RULE-SET,cn_additional),(RULE-SET,cn_ip,no-resolve)))))),REJECT
 
